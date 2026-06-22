@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Municipal Bonds Before Adaje — A 10-Minute Primer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ink:#15132E;          /* primary text, near-black indigo */
+  --navy:#1E1B4B;         /* deep indigo surface */
+  --navy-2:#2A2566;
+  --purple:#6C4DF2;       /* brand accent */
+  --purple-soft:#9B86FF;
+  --violet-50:#F3F0FF;    /* tinted surface */
+  --violet-100:#E9E3FF;
+  --bg:#F5F6FB;           /* page background */
+  --surface:#FFFFFF;
+  --line:#E5E5F1;         /* hairlines */
+  --line-2:#EFEFF7;
+  --text-2:#56546F;       /* muted text */
+  --text-3:#86849E;       /* fainter */
+  --mint:#11A87E;         /* balanced / correct */
+  --mint-bg:#E5F6F0;
+  --amber:#C98800;        /* caution / off-balance */
+  --amber-bg:#FBF1DC;
+  --red:#D64550;
+  --red-bg:#FCE9EA;
+  --shadow-sm:0 1px 2px rgba(21,19,46,.05), 0 1px 3px rgba(21,19,46,.06);
+  --shadow-md:0 6px 22px rgba(21,19,46,.08), 0 2px 6px rgba(21,19,46,.05);
+  --shadow-lg:0 18px 50px rgba(21,19,46,.14);
+  --r-sm:10px; --r:16px; --r-lg:22px;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --disp:'Space Grotesk',system-ui,sans-serif;
+  --body:'Inter',system-ui,sans-serif;
+  --maxw:1060px;
+}
+
+/* ============ BASE ============ */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity;scroll-padding-top:64px}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--body);font-size:16px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+}
+h1,h2,h3,h4{font-family:var(--disp);line-height:1.12;margin:0;letter-spacing:-.01em}
+p{margin:0 0 1em}
+a{color:var(--purple)}
+button{font-family:inherit}
+:focus-visible{outline:3px solid var(--purple-soft);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ============ TOP BAR + PROGRESS ============ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:60;height:56px;
+  display:flex;align-items:center;gap:14px;
+  padding:0 18px;background:rgba(245,246,251,.82);
+  backdrop-filter:saturate(180%) blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--disp);font-weight:700;font-size:15px;color:var(--ink);text-decoration:none}
+.brand .logo{
+  width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  background:linear-gradient(140deg,var(--purple),#3F2BA8);color:#fff;
+  font-family:var(--mono);font-weight:600;font-size:14px;box-shadow:var(--shadow-sm);
+}
+.brand small{font-family:var(--body);font-weight:500;color:var(--text-3);font-size:12px;letter-spacing:.02em}
+.topbar .spacer{flex:1}
+.tb-btn{
+  display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);
+  background:var(--surface);color:var(--text-2);font-size:13px;font-weight:600;
+  padding:7px 12px;border-radius:999px;cursor:pointer;transition:.18s;
+}
+.tb-btn:hover{border-color:var(--purple-soft);color:var(--purple);box-shadow:var(--shadow-sm)}
+.tb-btn svg{width:15px;height:15px}
+.tb-btn.on{background:var(--violet-50);border-color:var(--purple-soft);color:var(--purple)}
+.progress-track{position:fixed;top:56px;left:0;right:0;height:3px;background:var(--line-2);z-index:60}
+.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--purple-soft));transition:width .15s linear}
+
+/* ============ DOT NAV ============ */
+.dotnav{position:fixed;left:18px;top:50%;transform:translateY(-50%);z-index:50;display:flex;flex-direction:column;gap:11px}
+.dotnav button{
+  width:11px;height:11px;border-radius:50%;border:1.5px solid var(--line);
+  background:var(--surface);cursor:pointer;padding:0;position:relative;transition:.18s;
+}
+.dotnav button:hover{border-color:var(--purple)}
+.dotnav button[aria-current="true"]{background:var(--purple);border-color:var(--purple);transform:scale(1.25)}
+.dotnav button .tip{
+  position:absolute;left:20px;top:50%;transform:translateY(-50%);white-space:nowrap;
+  background:var(--ink);color:#fff;font-size:11px;font-weight:600;padding:4px 9px;border-radius:6px;
+  opacity:0;pointer-events:none;transition:.15s;font-family:var(--body)
+}
+.dotnav button:hover .tip{opacity:1}
+
+/* ============ SLIDES ============ */
+.deck{padding-top:59px}
+.slide{
+  min-height:100vh;display:flex;align-items:center;
+  scroll-snap-align:start;padding:74px 24px 96px;position:relative;
+}
+.slide__inner{width:100%;max-width:var(--maxw);margin:0 auto}
+.eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.eyebrow .num{
+  font-family:var(--mono);font-size:12px;font-weight:600;color:var(--purple);
+  background:var(--violet-50);border:1px solid var(--violet-100);
+  padding:4px 9px;border-radius:7px;letter-spacing:.04em;
+}
+.eyebrow .lbl{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3)}
+.eyebrow .rule{flex:1;height:1px;background:var(--line)}
+.slide h2{font-size:clamp(26px,4vw,40px);font-weight:700;margin-bottom:14px}
+.lede{font-size:clamp(16px,1.6vw,18px);color:var(--text-2);max-width:62ch;margin-bottom:26px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.06s}.reveal.d2{transition-delay:.12s}.reveal.d3{transition-delay:.18s}.reveal.d4{transition-delay:.24s}.reveal.d5{transition-delay:.3s}
+
+/* ============ CARDS / GRID ============ */
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.card{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:22px;box-shadow:var(--shadow-sm);
+}
+.card h3{font-size:18px;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.card p{font-size:14.5px;color:var(--text-2);margin:0}
+.card .ic{width:30px;height:30px;flex:none;border-radius:9px;display:grid;place-items:center;background:var(--violet-50);color:var(--purple)}
+.card .ic svg{width:17px;height:17px}
+.card.accent{border-color:var(--violet-100);background:linear-gradient(180deg,#fbfaff,#fff)}
+
+/* example badge */
+.ex{
+  display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;font-weight:600;
+  letter-spacing:.03em;color:var(--purple);background:var(--violet-50);border:1px solid var(--violet-100);
+  padding:5px 11px;border-radius:999px;margin-bottom:16px;
+}
+.ex .dot{width:6px;height:6px;border-radius:50%;background:var(--purple)}
+.ex-callout{
+  border-left:3px solid var(--purple);background:linear-gradient(90deg,var(--violet-50),#fff 80%);
+  padding:16px 18px;border-radius:0 var(--r-sm) var(--r-sm) 0;margin:6px 0 0;
+}
+.ex-callout .who{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--purple);margin-bottom:5px}
+.ex-callout p{font-size:14.5px;color:var(--ink);margin:0}
+
+/* glossary term token */
+.term{
+  font:inherit;color:var(--purple);background:none;border:none;padding:0;cursor:pointer;
+  font-weight:600;border-bottom:1.5px dotted var(--purple-soft);line-height:1.2;
+}
+.term:hover{border-bottom-style:solid}
+
+/* ============ FLOW DIAGRAM ============ */
+.flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;margin-top:8px}
+.flow-node{
+  flex:1;min-width:120px;background:var(--surface);border:1px solid var(--line);border-radius:14px;
+  padding:16px 12px;text-align:center;box-shadow:var(--shadow-sm);position:relative;
+}
+.flow-node .fic{width:34px;height:34px;margin:0 auto 9px;border-radius:10px;display:grid;place-items:center;background:var(--navy);color:#fff}
+.flow-node .fic svg{width:18px;height:18px}
+.flow-node .ft{font-family:var(--disp);font-weight:600;font-size:14px;margin-bottom:3px}
+.flow-node .fd{font-size:11.5px;color:var(--text-3);line-height:1.35}
+.flow-arrow{display:flex;align-items:center;color:var(--purple-soft);flex:none}
+.flow-arrow svg{width:20px;height:20px}
+.flow-node:nth-child(odd) .fic{background:var(--purple)}
+
+/* ============ TABLES ============ */
+.tbl{width:100%;border-collapse:collapse;font-size:14px;background:var(--surface);border-radius:var(--r);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow-sm)}
+.tbl th{
+  text-align:left;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-3);padding:12px 16px;background:var(--violet-50);border-bottom:1px solid var(--line)
+}
+.tbl td{padding:11px 16px;border-bottom:1px solid var(--line-2)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl .num{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tbl tr.total td{font-weight:700;background:#fafaff;border-top:1.5px solid var(--line)}
+.tbl tr.total .num{color:var(--purple)}
+
+/* ============ SOURCES & USES INTERACTIVE ============ */
+.su-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+.su-col{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.su-col h4{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:#fff;padding:11px 16px;margin:0}
+.su-col.sources h4{background:var(--purple)}
+.su-col.uses h4{background:var(--navy)}
+.su-row{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--line-2);font-size:14px;gap:10px}
+.su-row span:first-child{color:var(--text-2)}
+.su-row .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:500}
+.su-total{display:flex;justify-content:space-between;padding:12px 16px;font-weight:700;background:#fafaff;border-top:1.5px solid var(--line)}
+.su-total .v{font-family:var(--mono)}
+.su-control{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-top:16px;box-shadow:var(--shadow-sm)}
+.su-control label{font-size:13px;font-weight:600;color:var(--text-2);display:flex;justify-content:space-between;margin-bottom:10px}
+.su-control label .cur{font-family:var(--mono);color:var(--purple);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--purple);height:6px}
+.su-status{display:flex;align-items:center;gap:10px;margin-top:16px;font-weight:600;font-size:14px;padding:11px 14px;border-radius:var(--r-sm);font-family:var(--mono)}
+.su-status.bal{background:var(--mint-bg);color:var(--mint)}
+.su-status.off{background:var(--amber-bg);color:var(--amber)}
+.su-status .badge{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;color:#fff;flex:none}
+.su-status.bal .badge{background:var(--mint)}
+.su-status.off .badge{background:var(--amber)}
+.su-status svg{width:13px;height:13px}
+
+/* ============ STRUCTURE (serial/term) ============ */
+.struct{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.matur{flex:1;min-width:64px;text-align:center;padding:14px 6px;border-radius:11px;font-family:var(--mono);font-weight:600;font-size:13px;border:1px solid var(--line)}
+.matur.serial{background:var(--violet-50);color:var(--purple);border-color:var(--violet-100)}
+.matur.term{background:var(--navy);color:#fff;border-color:var(--navy)}
+.matur small{display:block;font-size:9.5px;font-weight:500;opacity:.7;letter-spacing:.06em;margin-top:3px;text-transform:uppercase}
+.legend{display:flex;gap:18px;margin-top:14px;flex-wrap:wrap}
+.legend span{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--text-2)}
+.legend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+.legend i.s{background:var(--violet-100);border:1px solid var(--purple-soft)}
+.legend i.t{background:var(--navy)}
+
+/* ============ TRANSLATION MAP ============ */
+.map-row{
+  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:14px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);
+  padding:13px 16px;box-shadow:var(--shadow-sm);
+}
+.map-row + .map-row{margin-top:9px}
+.map-concept{font-weight:600;font-size:14.5px}
+.map-concept small{display:block;font-weight:400;color:var(--text-3);font-size:12.5px;font-family:var(--body)}
+.map-arrow{color:var(--purple-soft);display:grid;place-items:center}
+.map-arrow svg{width:18px;height:18px}
+.map-soft{
+  font-family:var(--mono);font-size:13px;font-weight:600;color:var(--purple);
+  background:var(--violet-50);border:1px solid var(--violet-100);padding:7px 12px;border-radius:8px;
+  justify-self:start;
+}
+
+/* ============ QUIZ ============ */
+.quiz{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:8px;box-shadow:var(--shadow-md)}
+.q{padding:22px 24px;border-bottom:1px solid var(--line-2)}
+.q:last-of-type{border-bottom:none}
+.q .qn{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--purple);letter-spacing:.06em}
+.q .qt{font-family:var(--disp);font-weight:600;font-size:17px;margin:7px 0 15px;line-height:1.3}
+.opts{display:grid;gap:9px}
+.opt{
+  display:flex;align-items:center;gap:11px;text-align:left;width:100%;cursor:pointer;
+  border:1.5px solid var(--line);background:var(--surface);border-radius:11px;padding:12px 15px;
+  font-size:14.5px;color:var(--ink);transition:.16s;
+}
+.opt:hover:not(:disabled){border-color:var(--purple-soft);background:var(--violet-50)}
+.opt .mk{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text-3)}
+.opt:disabled{cursor:default}
+.opt.correct{border-color:var(--mint);background:var(--mint-bg);color:#0c7a5b}
+.opt.correct .mk{background:var(--mint);border-color:var(--mint);color:#fff}
+.opt.wrong{border-color:var(--red);background:var(--red-bg);color:#a32f38}
+.opt.wrong .mk{background:var(--red);border-color:var(--red);color:#fff}
+.opt .ck{margin-left:auto;width:17px;height:17px;display:none}
+.opt.correct .ck,.opt.wrong .ck{display:block}
+.quiz-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 24px;flex-wrap:wrap}
+.score{font-family:var(--mono);font-weight:600;font-size:15px}
+.score b{color:var(--purple);font-size:22px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;font-weight:600;font-size:14px;
+  padding:11px 20px;border-radius:999px;background:var(--purple);color:#fff;transition:.18s;box-shadow:var(--shadow-sm);
+}
+.btn:hover{background:#5a3ce0;box-shadow:var(--shadow-md);transform:translateY(-1px)}
+.btn.ghost{background:var(--surface);color:var(--purple);border:1px solid var(--violet-100)}
+.btn.ghost:hover{background:var(--violet-50)}
+.btn svg{width:15px;height:15px}
+
+/* ============ CHECKLIST ============ */
+.check{display:grid;gap:12px;margin-top:8px}
+.check-item{
+  display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);
+  border-radius:var(--r);padding:16px 20px;box-shadow:var(--shadow-sm);cursor:pointer;transition:.16s;
+}
+.check-item:hover{border-color:var(--purple-soft)}
+.check-item .box{
+  width:24px;height:24px;flex:none;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;
+  margin-top:1px;transition:.16s;color:#fff;
+}
+.check-item.done .box{background:var(--mint);border-color:var(--mint)}
+.check-item .box svg{width:14px;height:14px;opacity:0;transition:.16s}
+.check-item.done .box svg{opacity:1}
+.check-item h4{font-size:15.5px;margin-bottom:3px}
+.check-item.done h4{text-decoration:line-through;color:var(--text-3)}
+.check-item p{font-size:13.5px;color:var(--text-2);margin:0}
+.check-item .nn{font-family:var(--mono);font-size:12px;color:var(--purple);font-weight:600;margin-right:2px}
+
+/* ============ SPEAKER NOTES ============ */
+.notes{
+  margin-top:26px;border-left:3px solid var(--violet-100);background:#fafaff;
+  border-radius:0 var(--r-sm) var(--r-sm) 0;padding:14px 18px;
+}
+.notes .nlbl{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-3);margin-bottom:6px}
+.notes .nlbl svg{width:13px;height:13px;color:var(--purple-soft)}
+.notes p{font-size:13.5px;color:var(--text-2);margin:0;font-style:italic}
+body.no-notes .notes{display:none}
+
+/* ============ COVER ============ */
+.cover{background:radial-gradient(120% 120% at 80% 0%,#2A2566 0%,#1A1740 55%,#13112E 100%);color:#fff;overflow:hidden}
+.cover .slide__inner{position:relative;z-index:2}
+.cover .kicker{display:inline-flex;align-items:center;gap:9px;font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.04em;color:var(--purple-soft);background:rgba(155,134,255,.12);border:1px solid rgba(155,134,255,.28);padding:7px 14px;border-radius:999px;margin-bottom:26px}
+.cover h1{font-size:clamp(34px,6.2vw,62px);font-weight:700;letter-spacing:-.025em;line-height:1.02;margin-bottom:20px}
+.cover h1 em{font-style:normal;background:linear-gradient(100deg,var(--purple-soft),#C9BCFF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cover .sub{font-size:clamp(16px,1.9vw,20px);color:#C9C6E6;max-width:60ch;margin-bottom:30px}
+.cover .meta{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:34px}
+.cover .meta div{font-size:13px}
+.cover .meta .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple-soft);margin-bottom:4px}
+.cover .meta .vv{color:#fff;font-weight:500}
+.cover .start{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--navy);font-weight:600;font-size:15px;padding:14px 26px;border-radius:999px;border:none;cursor:pointer;transition:.2s;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.cover .start:hover{transform:translateY(-2px)}
+.cover .start svg{width:17px;height:17px}
+.cover-figure{position:absolute;right:-40px;top:50%;transform:translateY(-50%);width:46%;max-width:520px;opacity:.9;z-index:1;pointer-events:none}
+.disclaimer-pill{position:absolute;bottom:26px;left:24px;right:24px;max-width:var(--maxw);margin:0 auto;font-size:11.5px;color:rgba(201,198,230,.7);font-family:var(--mono);letter-spacing:.01em}
+@media(max-width:760px){.cover-figure{display:none}}
+
+/* floating orbit motif on cover */
+.orbit{position:absolute;border-radius:50%;border:1px solid rgba(155,134,255,.16)}
+
+/* ============ MODAL (glossary) ============ */
+.modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal[hidden]{display:none}
+.modal__bg{position:absolute;inset:0;background:rgba(21,19,46,.55);backdrop-filter:blur(3px)}
+.modal__panel{position:relative;background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--shadow-lg);max-width:540px;width:100%;max-height:82vh;overflow:auto;padding:28px}
+.modal__panel.wide{max-width:680px}
+.modal__close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:grid;place-items:center;color:var(--text-2)}
+.modal__close:hover{background:var(--violet-50);color:var(--purple)}
+.modal__close svg{width:16px;height:16px}
+.modal__term{font-family:var(--disp);font-size:24px;font-weight:700;margin-bottom:6px}
+.modal__tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--purple);margin-bottom:14px;display:inline-block}
+.modal__def{font-size:15.5px;color:var(--text-2);line-height:1.65}
+.gl-search{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 14px;font-size:14px;font-family:inherit;margin:6px 0 18px}
+.gl-search:focus{outline:none;border-color:var(--purple-soft);box-shadow:0 0 0 3px var(--violet-50)}
+.gl-list{display:grid;gap:4px}
+.gl-entry{padding:13px 14px;border-radius:11px;border:1px solid transparent}
+.gl-entry:hover{background:var(--violet-50)}
+.gl-entry dt{font-family:var(--disp);font-weight:600;font-size:15px;margin-bottom:3px}
+.gl-entry dd{margin:0;font-size:13.5px;color:var(--text-2);line-height:1.5}
+
+/* ============ FOOTNOTE / DISCLAIMER STRIP ============ */
+.foot{background:var(--ink);color:#C9C6E6;text-align:center;padding:30px 24px}
+.foot p{margin:0 auto;max-width:70ch;font-size:13px;line-height:1.7}
+.foot .em{color:#fff;font-weight:600}
+.foot small{display:block;margin-top:10px;color:rgba(201,198,230,.55);font-family:var(--mono);font-size:11px}
+
+/* ============ BOTTOM DECK NAV ============ */
+.decknav{
+  position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:55;
+  display:flex;align-items:center;gap:4px;background:var(--surface);
+  border:1px solid var(--line);border-radius:999px;padding:5px;box-shadow:var(--shadow-md);
+}
+.decknav button{width:38px;height:38px;border-radius:50%;border:none;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--text-2);transition:.16s}
+.decknav button:hover:not(:disabled){background:var(--violet-50);color:var(--purple)}
+.decknav button:disabled{opacity:.3;cursor:default}
+.decknav button svg{width:18px;height:18px}
+.decknav .count{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);min-width:62px;text-align:center}
+.decknav .count b{color:var(--purple)}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:880px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .su-wrap{grid-template-columns:1fr}
+  .dotnav{display:none}
+  .flow{flex-direction:column}
+  .flow-arrow{transform:rotate(90deg);align-self:center}
+  .map-row{grid-template-columns:1fr;gap:8px;text-align:left}
+  .map-arrow{transform:rotate(90deg);justify-self:start}
+  .map-soft{justify-self:stretch;text-align:center}
+}
+@media(max-width:520px){
+  .slide{padding:64px 16px 92px}
+  .matur{min-width:52px;font-size:11px;padding:11px 3px}
+  .cover .meta{gap:18px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .reveal{opacity:1;transform:none;transition:none}
+  .btn:hover,.cover .start:hover{transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ TOP BAR ============ -->
+<header class="topbar">
+  <a class="brand" href="#cover">
+    <span class="logo">A</span>
+    Adaje Academy <small>· Pre-training</small>
+  </a>
+  <span class="spacer"></span>
+  <button class="tb-btn" id="glossaryBtn" aria-haspopup="dialog">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+    Glossary
+  </button>
+  <button class="tb-btn on" id="notesBtn" aria-pressed="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg>
+    Speaker notes
+  </button>
+</header>
+<div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- ============ DOT NAV ============ -->
+<nav class="dotnav" id="dotnav" aria-label="Section navigation"></nav>
+
+<main class="deck" id="deck">
+
+<!-- 0 · COVER ------------------------------------------------------------>
+<section class="slide cover" id="cover" data-title="Cover">
+  <svg class="cover-figure" viewBox="0 0 400 400" fill="none" aria-hidden="true">
+    <circle class="orbit" cx="200" cy="200" r="60" stroke="rgba(155,134,255,.25)"/>
+    <circle class="orbit" cx="200" cy="200" r="110" stroke="rgba(155,134,255,.18)"/>
+    <circle class="orbit" cx="200" cy="200" r="160" stroke="rgba(155,134,255,.1)"/>
+    <g stroke="#9B86FF" stroke-width="2">
+      <rect x="172" y="172" width="56" height="56" rx="12" fill="#6C4DF2" stroke="none"/>
+      <path d="M188 210v-18M200 210v-26M212 210v-12" stroke="#fff" stroke-linecap="round"/>
+    </g>
+    <circle cx="200" cy="90" r="8" fill="#C9BCFF"/>
+    <circle cx="310" cy="200" r="8" fill="#9B86FF"/>
+    <circle cx="200" cy="310" r="8" fill="#C9BCFF"/>
+    <circle cx="90" cy="200" r="8" fill="#9B86FF"/>
+  </svg>
+  <div class="slide__inner">
+    <span class="kicker"><span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--purple-soft)"></span> 10-minute primer · before you start the software</span>
+    <h1>Municipal Bonds <em>Before Adaje</em></h1>
+    <p class="sub">A fast, practical tour of the public-finance concepts that make Adaje click — framed around how municipal debt is actually modeled in software. Smart, not academic.</p>
+    <div class="meta">
+      <div><div class="k">Audience</div><div class="vv">New analysts · advisors · bankers</div></div>
+      <div><div class="k">Format</div><div class="vv">10 slides + quiz</div></div>
+      <div><div class="k">Running example</div><div class="vv">Northgate State University</div></div>
+    </div>
+    <button class="start" id="startBtn">Start the primer
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+  <p class="disclaimer-pill">Conceptual primer — illustrative numbers only. Not legal, tax, or investment advice. This sits ahead of, and does not replace, full Adaje Academy training.</p>
+</section>
+
+<!-- 1 · BIG PICTURE ------------------------------------------------------>
+<section class="slide" id="s1" data-title="The Big Picture">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">01</span><span class="lbl">The Big Picture</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Debt has a lifecycle, and the software follows it</h2>
+    <p class="lede reveal d1">A borrower — a university, city, county, or school district — sells bonds to fund a project or to refinance debt it already has. Everything in Adaje maps onto a single, repeating story:</p>
+
+    <div class="flow reveal d2">
+      <div class="flow-node"><div class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></div><div class="ft">Borrower</div><div class="fd">Owns the credit &amp; obligation</div></div>
+      <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-node"><div class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg></div><div class="ft">Project</div><div class="fd">Financing / scenario container</div></div>
+      <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-node"><div class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22V4M4 4h13l-2.5 4L17 12H4"/></svg></div><div class="ft">Purpose</div><div class="fd">Why money is raised or used</div></div>
+      <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-node"><div class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></div><div class="ft">Issue</div><div class="fd">Bond series inside the project</div></div>
+      <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-node"><div class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></div><div class="ft">Debt Service</div><div class="fd">Principal + interest over time</div></div>
+      <div class="flow-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+      <div class="flow-node"><div class="fic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></div><div class="ft">Manage / Refund</div><div class="fd">Refinance when it pays</div></div>
+    </div>
+    <p class="reveal d2" style="font-size:13px;color:var(--text-3);margin-top:12px">Read these as containers and roles, not just steps: the <strong>project</strong> holds the work, each <strong>purpose</strong> says why money is raised or used, and each <strong>issue</strong> is the actual bond series sold.</p>
+
+    <div class="ex-callout reveal d3" style="margin-top:22px">
+      <div class="who">Running example · Northgate State University</div>
+      <p>Northgate built a new science building, funded it with a 2015 bond <span class="term" data-term="issue">issue</span>, and has paid <span class="term" data-term="debt service">debt service</span> ever since. Rates have fallen — so now it's eyeing a <span class="term" data-term="refunding">refunding</span>. That single arc is the whole module.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Don't get lost in jargon yet. The one idea to land: every screen in Adaje is a stage in this lifecycle. If someone can place where they are on this line — issuing new debt, or refinancing old debt — the rest of the tool stops feeling abstract.</p></div>
+  </div>
+</section>
+
+<!-- 2 · CONTAINERS ------------------------------------------------------->
+<section class="slide" id="s2" data-title="Borrower vs Issuer vs Project">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">02</span><span class="lbl">Who's Who, What's What</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Borrower, issuer, project, and issue</h2>
+    <p class="lede reveal d1">These words get used loosely in conversation. In Adaje they're separate things on purpose — each holds different data, and keeping them apart is what lets you model many scenarios against one credit.</p>
+
+    <div class="grid g2 reveal d2">
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span>Borrower</h3><p>The entity responsible for repaying the debt — the <span class="term" data-term="obligor">obligor</span>. Its <span class="term" data-term="credit">credit</span> usually drives the rating. Northgate State University is the borrower here.</p></div>
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M6 21V7l6-4 6 4v14M10 9h.01M14 9h.01M10 13h.01M14 13h.01"/></svg></span>Issuer</h3><p>The legal entity that issues the bonds. Sometimes that's the borrower itself; sometimes a <span class="term" data-term="finance authority">finance authority</span> acts as a <span class="term" data-term="conduit issuer">conduit issuer</span> on the borrower's behalf.</p></div>
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>Project</h3><p>The broader financing <em>container</em> in Adaje. A single <span class="term" data-term="project">project</span> can hold multiple issues and multiple purposes — not just one deal.</p></div>
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>Issue</h3><p>One financing or bond series <em>inside</em> a project — Series 2015, Series 2026. A project can have several <span class="term" data-term="issue">issues</span>; each carries its own maturities, coupons, and pricing.</p></div>
+    </div>
+
+    <div class="ex-callout reveal d3" style="margin-top:20px">
+      <div class="who">Conduit issuer — why borrower vs. issuer matters</div>
+      <p>A finance authority can act as a <strong>conduit issuer</strong>: it provides the legal mechanism to issue the bonds, but the actual borrower/obligor is usually responsible for repayment. The conduit issuer doesn't necessarily guarantee repayment or lend its own credit support — so the rating typically follows the <strong>borrower's</strong> credit unless the issuer or another party is actually providing support. That's exactly why Adaje keeps borrower and issuer separate.</p>
+    </div>
+
+    <div class="ex-callout reveal d4" style="margin-top:14px">
+      <div class="who">One more distinction · issue vs. issuance vs. purpose</div>
+      <p>An <strong>issue</strong> is the bond series; <span class="term" data-term="issuance">issuance</span> is the <em>process</em> of those bonds going to market — don't conflate them. And a <span class="term" data-term="purpose">purpose</span> (new money or refunding) is <strong>not</strong> a project. A project can contain multiple issues and purposes when they're part of the <strong>same financing scenario</strong>, connected through <span class="term" data-term="assignment">assignments</span>.</p>
+    </div>
+
+    <div class="ex-callout reveal d4" style="margin-top:14px">
+      <div class="who">Modeling a refunding of live debt</div>
+      <p>In Adaje, a refunding of existing <strong>live</strong> debt is generally modeled as its <strong>own project</strong>. Only one project/instance can be set to Live, and the original debt needs to stay live so its remaining maturities still appear in the borrower-level debt summary. So the original debt and a later refunding usually sit in separate projects.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>The trap is collapsing everything into "the bond." A project is a container for one financing scenario; it can hold several issues and purposes joined by assignments. But a refunding of live debt is its own project — only one instance can be Live, and the original debt must stay live so its remaining maturities still roll up to the borrower-level summary.</p></div>
+  </div>
+</section>
+
+<!-- 3 · NEW MONEY vs REFUNDING ------------------------------------------->
+<section class="slide" id="s3" data-title="New Money vs Refunding">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">03</span><span class="lbl">Purposes, Not Projects</span><span class="rule"></span></div>
+    <h2 class="reveal d1">New money vs. refunding</h2>
+    <p class="lede reveal d1">Every issue is tied to a <span class="term" data-term="purpose">purpose</span> — <em>why</em> the bonds are being issued. The two you'll meet most are new money and refunding. These are purposes, not projects. Several purposes and issues can sit in one project when they're part of the same financing scenario — but a refunding of existing live debt is generally its own project.</p>
+
+    <div class="grid g3 reveal d2">
+      <div class="card accent"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></span>New money</h3><p>A purpose where proceeds fund a new project — they buy something that doesn't exist yet (a building, a road, equipment).</p></div>
+      <div class="card accent"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg></span>Refunding</h3><p>A purpose where new bonds pay off existing bonds — usually to capture lower rates. Proceeds retire old debt rather than build something new.</p></div>
+      <div class="card accent"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h7M9 6v12M15 6v12M22 12h-7"/></svg></span>Partial refunding</h3><p>Refunding only <em>part</em> of an old issue — for example, a specific set of maturities — while leaving the rest outstanding.</p></div>
+    </div>
+
+    <div class="ex-callout reveal d3" style="margin-top:20px">
+      <div class="who">Northgate, 2015 → 2026</div>
+      <p>Northgate's <strong>Series 2015</strong> bonds were the original debt (a new-money purpose) that built the science center. In 2026, with rates lower, a <strong>Series 2026</strong> refunding of the 2030–2035 maturities would be modeled as its <strong>own refunding project</strong> in Adaje. The original Series 2015 project stays <strong>live</strong> for the maturities that remain outstanding, while the refunding project shows the new refunding bonds and the refunded maturities.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Two corrections to make out loud: (1) new money and refunding are <em>purposes</em>, not projects; (2) a refunding of live debt is modeled as a separate project, because the original project must stay live so its remaining maturities keep showing up at the borrower level. New money points proceeds at a project fund; refunding points them at retiring old bonds.</p></div>
+  </div>
+</section>
+
+<!-- 4 · SOURCES & USES (INTERACTIVE) ------------------------------------->
+<section class="slide" id="s4" data-title="Sources & Uses">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">04</span><span class="lbl">The Balance That Must Hold</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Sources &amp; Uses — the two sides must tie</h2>
+    <p class="lede reveal d1"><span class="term" data-term="sources & uses">Sources</span> are the funds available to pay for the Uses. The two totals <strong>must match</strong>. Below, the columns start out of balance — click <strong>Solve</strong> and Adaje adds a small rounding amount so they tie, the way the software handles rounding when it sizes a deal.</p>
+
+    <div class="grid g2 reveal d2" style="margin-bottom:16px">
+      <div class="card"><h3 style="font-size:16px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>Sources</h3><p>Where the money comes from in the financing — such as par amount, premium, funds on hand, or other available funds.</p></div>
+      <div class="card"><h3 style="font-size:16px"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span>Uses</h3><p>Where the money goes — such as project fund deposits, refunded bonds, costs, capitalized interest, or reserves.</p></div>
+    </div>
+
+    <div class="su-wrap reveal d3">
+      <div class="su-col sources">
+        <h4>Sources</h4>
+        <div class="su-row"><span><span class="term" data-term="par">Par amount</span></span><span class="v">$12,000,000</span></div>
+        <div class="su-row"><span>Net <span class="term" data-term="premium">premium</span></span><span class="v">$640,000</span></div>
+        <div class="su-row"><span>Funds on hand</span><span class="v">$150,000</span></div>
+        <div class="su-total"><span>Total Sources</span><span class="v" id="suSourcesTotal">$12,790,000</span></div>
+      </div>
+      <div class="su-col uses">
+        <h4>Uses</h4>
+        <div class="su-row"><span>Project fund deposit</span><span class="v">$12,400,000</span></div>
+        <div class="su-row"><span><span class="term" data-term="costs of issuance">Costs of issuance</span></span><span class="v">$95,000</span></div>
+        <div class="su-row"><span><span class="term" data-term="capitalized interest">Capitalized interest</span></span><span class="v">$250,000</span></div>
+        <div class="su-row"><span>Rounding amount</span><span class="v" id="suRound">$0</span></div>
+        <div class="su-total"><span>Total Uses</span><span class="v" id="suUsesTotal">$12,745,000</span></div>
+      </div>
+    </div>
+
+    <div class="su-control reveal d3" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div class="su-status off" id="suStatus" style="margin-top:0;flex:1;min-width:220px">
+        <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg></span>
+        <span id="suStatusText">Out of balance by $45,000</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn" id="suSolve">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+          Solve
+        </button>
+        <button class="btn ghost" id="suReset">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8"/></svg>
+          Reset
+        </button>
+      </div>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Sources = Uses, always. The point of the Solve button is to show that small gaps don't mean the model is wrong — Adaje carries a rounding amount to tie the two sides. Emphasize: Sources are simply the funds available to cover the Uses.</p></div>
+  </div>
+</section>
+
+<!-- 5 · STRUCTURE -------------------------------------------------------->
+<section class="slide" id="s5" data-title="Serial vs Term Bonds">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">05</span><span class="lbl">Bond Structure</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Serial bonds vs. term bonds</h2>
+    <p class="lede reveal d1">An issue is built from maturities. The difference between serial and term is really about <strong>payment dates and pricing</strong> — not about whether the bonds can be refunded.</p>
+
+    <div class="grid g2 reveal d2" style="margin-bottom:18px">
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21V10M9 21V6M15 21V13M21 21V3"/></svg></span><span class="term" data-term="serial bonds" style="border:none;color:inherit">Serial bonds</span></h3><p>A serial bond has a <strong>single payment date</strong> on maturity and its <strong>own individual pricing</strong> — it doesn't share pricing with other payments in the issuance. Serial bonds can mature in any frequency.</p><p style="margin-top:8px;font-size:12.5px;color:var(--text-3)">MSRB-style: bonds of an issue that mature in consecutive years or other intervals and are not subject to mandatory sinking-fund provisions.</p></div>
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="8" width="18" height="11" rx="2"/><path d="M7 8V5h10v3"/></svg></span><span class="term" data-term="term bonds" style="border:none;color:inherit">Term bonds</span></h3><p>A term bond has <strong>at least two payments</strong> — <span class="term" data-term="sinking fund">sinking-fund</span> payments — that <strong>share a single price</strong>. Its maturity date falls on the final sinking-fund payment date.</p><p style="margin-top:8px;font-size:12.5px;color:var(--text-3)">MSRB-style: bonds that come due in a single maturity, with the issuer making periodic sinking-fund payments for mandatory redemption before, or payment at, maturity.</p></div>
+    </div>
+
+    <p class="lede reveal d3" style="margin-bottom:10px">Northgate's Series 2015, simplified — three serial maturities and one term bond:</p>
+    <div class="struct reveal d3">
+      <div class="matur serial">2027<small>serial</small></div>
+      <div class="matur serial">2028<small>serial</small></div>
+      <div class="matur serial">2029<small>serial</small></div>
+      <div class="matur term">2030<small>SF →</small></div>
+      <div class="matur term">2031<small>SF</small></div>
+      <div class="matur term">2032<small>SF</small></div>
+      <div class="matur term">2033<small>SF</small></div>
+      <div class="matur term">2034<small>SF</small></div>
+      <div class="matur term">2035<small>maturity</small></div>
+    </div>
+    <div class="legend reveal d3">
+      <span><i class="s"></i> Serial maturities — each its own payment date &amp; price</span>
+      <span><i class="t"></i> Term bond — sinking-fund (SF) payments 2030–2034, maturity 2035, one shared price</span>
+    </div>
+
+    <div class="ex-callout reveal d4" style="margin-top:20px">
+      <div class="who">The teaching point</div>
+      <p>Serial bonds have <strong>individual pricing and one payment date</strong>; term bonds have <strong>multiple sinking-fund payments that share one price</strong>. Whether bonds are serial or term doesn't by itself determine whether they can be refunded — it affects how payments and pricing are structured.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>The cleanest framing: serial = one payment date, its own price. Term = several sinking-fund payments under one price, maturing on the last one. Avoid implying that being a term bond makes something refundable — refundability depends on economics, call provisions, and the analysis, not the serial/term label.</p></div>
+  </div>
+</section>
+
+<!-- 6 · AMORTIZATION & DEBT SERVICE -------------------------------------->
+<section class="slide" id="s6" data-title="Amortization & Debt Service">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">06</span><span class="lbl">Paying It Back</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Amortization and debt service</h2>
+    <p class="lede reveal d1"><span class="term" data-term="amortization">Amortization</span> is the principal repayment structure of an issue. <span class="term" data-term="debt service">Debt service</span> is principal <em>plus</em> interest — the actual cash the borrower pays. A common amortization goal is <span class="term" data-term="level debt service">level debt service</span>: principal often increases over time as interest decreases, so total debt service stays relatively level.</p>
+
+    <div class="reveal d2">
+      <table class="tbl">
+        <thead><tr><th>Year</th><th class="num">Principal</th><th class="num">Interest</th><th class="num">Total debt service</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">2027</td><td class="num">1,000,000</td><td class="num">480,000</td><td class="num">1,480,000</td></tr>
+          <tr><td class="mono">2028</td><td class="num">1,050,000</td><td class="num">440,000</td><td class="num">1,490,000</td></tr>
+          <tr><td class="mono">2029</td><td class="num">1,100,000</td><td class="num">398,000</td><td class="num">1,498,000</td></tr>
+          <tr class="total"><td class="mono">Total</td><td class="num">3,150,000</td><td class="num">1,318,000</td><td class="num">4,468,000</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12.5px;color:var(--text-3);margin-top:8px;font-family:var(--mono)">Illustrative figures showing level debt service — principal rises as interest falls, so the total stays smooth.</p>
+    </div>
+
+    <div class="ex-callout reveal d3" style="margin-top:20px">
+      <div class="who">Why Adaje users care</div>
+      <p>For <strong>new money</strong>, you shape amortization to hit a target debt-service profile (often level). For a <strong>refunding</strong>, you compare the <em>old</em> debt-service schedule against the <em>new</em> one — the gap between them is the savings. The amortization schedule is the spine both calculations hang on.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Keep the distinction crisp: amortization is principal only; debt service is principal + interest. Refunding savings are literally old debt service minus new debt service, year by year. That's why the schedule is the first thing analysts look at.</p></div>
+  </div>
+</section>
+
+<!-- 7 · COUPON / YIELD / PRICE / PREMIUM -------------------------------->
+<section class="slide" id="s7" data-title="Coupon, Yield, Price, Premium">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">07</span><span class="lbl">Pricing Mechanics</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Coupon, yield, price, and premium / discount</h2>
+    <p class="lede reveal d1">Four words that trip people up — and one pair, <span class="term" data-term="premium">premium / discount</span>, that follows from the others.</p>
+
+    <div class="grid g4 reveal d2">
+      <div class="card"><h3>Coupon</h3><p>The stated interest rate on the bond. It sets the interest paid, based on par. In conduit deals, the borrower/obligor is usually the party responsible for repayment.</p></div>
+      <div class="card"><h3>Yield</h3><p>The <strong>investor's</strong> return given what they paid — essentially the market rate.</p></div>
+      <div class="card"><h3>Price</h3><p>What investors actually pay, quoted vs. par. 100 = par; 110 = 110% of face.</p></div>
+      <div class="card"><h3>Premium / Discount</h3><p>Any amount paid <strong>above par</strong> is premium; any amount <strong>below par</strong> is discount.</p></div>
+    </div>
+
+    <div class="ex-callout reveal d3" style="margin-top:20px">
+      <div class="who">What drives it</div>
+      <p>Premium and discount are <strong>results</strong> of the relationship between coupon, yield, price, delivery date, and call structure — not inputs you set directly. As a rule of thumb, when the <strong>coupon is higher than the yield</strong>, the price is above 100 (a premium). Example: a Northgate maturity with a <span class="mono">5.00%</span> coupon priced to <span class="term" data-term="yield">yield</span> <span class="mono">3.50%</span> might price near <span class="mono">110</span>, and that premium shows up as proceeds in Sources &amp; Uses.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Coupon is what the issuer pays; yield is what the investor earns. Above par = premium, below par = discount. The important nuance: premium/discount are outputs of coupon, yield, price, delivery date, and call structure — so they move when any of those move.</p></div>
+  </div>
+</section>
+
+<!-- 8 · CALL DATES ------------------------------------------------------->
+<section class="slide" id="s8" data-title="Call Dates">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">08</span><span class="lbl">When Bonds Can Be Redeemed</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Call dates, redemption, and defeasance</h2>
+    <p class="lede reveal d1">A <span class="term" data-term="call date">call date</span> affects <em>when</em> existing bonds can be redeemed at the stated <span class="term" data-term="call price">call price</span> — it doesn't, by itself, decide whether a bond gets refunded. <span class="term" data-term="optional redemption">Optional redemption</span> is that right in action.</p>
+
+    <div class="grid g3 reveal d2">
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>Call date &amp; price</h3><p>On or after the call date, bonds can be redeemed at the <span class="term" data-term="call price">call price</span> — often <span class="mono">100%</span> of par at first call.</p></div>
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22v-6h6v6"/></svg></span>Defeasance</h3><p>Bonds may be <span class="term" data-term="defeasance">defeased</span> before the call date by setting aside funds in an escrow — though they usually can't be redeemed at the normal call price until that date.</p></div>
+      <div class="card"><h3><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M5 9l7-7 7 7"/></svg></span>Make-whole</h3><p>Before the call date, some bonds carry a <span class="term" data-term="make-whole price">make-whole</span> provision — they can be redeemed earlier, but at a formula-based make-whole price rather than the normal call price.</p></div>
+    </div>
+
+    <div class="ex-callout reveal d3" style="margin-top:20px">
+      <div class="who">Simple example</div>
+      <p>Old bonds are callable on <span class="mono">11/1/2034</span> at <span class="mono">100%</span>. That date sets when they can be redeemed at the call price. Not all callable bonds are refunded, though — whether one is refunded depends on economics, structure, call provisions, and the purpose of the analysis.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Correct the common misconception: the call date governs <em>when</em> redemption at the call price is allowed — not <em>whether</em> a bond can be refunded. Defeasance (escrow) and make-whole provisions are the two ways activity can happen before the call date. Whether a refunding actually happens is an economic and structural question.</p></div>
+  </div>
+</section>
+
+<!-- 9 · REFUNDING ANALYSIS ----------------------------------------------->
+<section class="slide" id="s9" data-title="Refunding Analysis">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">09</span><span class="lbl">Putting It Together</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Refunding analysis</h2>
+    <p class="lede reveal d1">This is where the earlier ideas combine. A refunding asks one question: does issuing new bonds to retire old ones save enough, today, to be worth doing?</p>
+
+    <div class="grid g3 reveal d2">
+      <div class="card"><h3>Old vs. new debt service</h3><p>The core comparison — line up the existing debt service against the proposed new debt service.</p></div>
+      <div class="card"><h3>Refunded par</h3><p>The face amount of old bonds being retired (Northgate's 2030–2035 maturities: ~<span class="mono">$12M</span>).</p></div>
+      <div class="card"><h3><span class="term" data-term="pv savings">PV savings</span></h3><p>Present value of the debt-service reduction — the headline benefit (illustratively ~<span class="mono">$640K</span>).</p></div>
+      <div class="card"><h3>Call date / redemption timing</h3><p>When the old bonds can be redeemed at the <span class="term" data-term="call price">call price</span> — the timing the analysis works around.</p></div>
+      <div class="card"><h3><span class="term" data-term="match maturity">Match maturity</span></h3><p>Structuring the new bonds to correspond to the maturities being refunded — useful for comparing savings.</p></div>
+    </div>
+
+    <div class="ex-callout reveal d3" style="margin-top:20px">
+      <div class="who">"Match maturity," explained</div>
+      <p>A <span class="term" data-term="match maturity">match-maturity</span> refunding structures the new bonds to <strong>correspond to the maturities being refunded</strong>, with the final maturity of the refunding bonds lined up to the final maturity being refunded. That lets you lay the old debt service next to the new debt service for a cleaner apples-to-apples read on savings. It's a useful structure for comparison — not something that's always required.</p>
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Keep it practical: compare old debt service to new debt service, look at PV savings on the refunded par, and respect the call date / redemption timing. Match maturity makes the comparison cleaner. Don't dwell on costs of issuance or negative arbitrage here.</p></div>
+  </div>
+</section>
+
+<!-- 10 · CONNECTS TO ADAJE ----------------------------------------------->
+<section class="slide" id="s10" data-title="How This Connects to Adaje">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">10</span><span class="lbl">Translation Map</span><span class="rule"></span></div>
+    <h2 class="reveal d1">How this connects to Adaje</h2>
+    <p class="lede reveal d1">Every concept you just met lives somewhere in the software. Here's the map from idea to screen — so the first click feels familiar.</p>
+
+    <div class="reveal d2" id="mapBox">
+      <!-- rows injected by JS -->
+    </div>
+
+    <div class="notes"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Treat this as the orientation slide for day one in the tool. If someone forgets a term, the right move isn't to re-explain finance — it's to point at this map and say "that concept is this screen." It bridges theory to the actual UI.</p></div>
+  </div>
+</section>
+
+<!-- 11 · QUIZ ------------------------------------------------------------>
+<section class="slide" id="s11" data-title="Quick Quiz">
+  <div class="slide__inner">
+    <div class="eyebrow reveal"><span class="num">11</span><span class="lbl">5-Question Check</span><span class="rule"></span></div>
+    <h2 class="reveal d1">Quick quiz</h2>
+    <p class="lede reveal d1">Five questions, instant feedback. No pressure — it's just a self-check before you open the software.</p>
+
+    <div class="quiz reveal d2" id="quiz"><!-- injected --></div>
+  </div>
+</section>
+
+<!-- 12 · CLOSING --------------------------------------------------------->
+<section class="slide" id="s12" data-title="You're Ready">
+  <div class="slide__inner" style="text-align:center;max-width:760px">
+    <div class="eyebrow reveal" style="justify-content:center"><span class="num">12</span><span class="lbl">Continue</span></div>
+    <div class="reveal d1" style="width:64px;height:64px;margin:6px auto 22px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(140deg,var(--purple),#3F2BA8);color:#fff;box-shadow:var(--shadow-md)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:30px;height:30px"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </div>
+    <h2 class="reveal d1" style="font-size:clamp(26px,4vw,38px)">That's the primer</h2>
+    <p class="lede reveal d2" style="margin:14px auto 0">This primer is meant to prepare users to continue into the Adaje Academy software-specific modules — where each of these concepts gets put to work in the tool itself.</p>
+
+    <div class="notes" style="text-align:left;max-width:620px;margin-left:auto;margin-right:auto"><div class="nlbl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"/></svg> Speaker notes</div><p>Keep the close short. This module is a preface — from here the learner moves into the Adaje Academy software-specific modules.</p></div>
+  </div>
+</section>
+
+<!-- FOOTER --------------------------------------------------------------->
+<footer class="foot">
+  <p><span class="em">This is a conceptual primer, not a full municipal finance course.</span> It's a preface that leads into the Adaje Academy. All figures, dates, and the Northgate State University example are illustrative and simplified for teaching. Nothing here is legal, tax, or investment advice.</p>
+  <small>Adaje Academy · Pre-training module · prototype</small>
+</footer>
+
+</main>
+
+<!-- DECK NAV ------------------------------------------------------------->
+<nav class="decknav" aria-label="Deck navigation">
+  <button id="prevBtn" aria-label="Previous section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
+  <span class="count"><b id="curNum">1</b> / <span id="totNum">14</span></span>
+  <button id="nextBtn" aria-label="Next section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
+</nav>
+
+<!-- GLOSSARY MODAL ------------------------------------------------------->
+<div class="modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal__bg" data-close></div>
+  <div class="modal__panel" id="modalPanel">
+    <button class="modal__close" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   GLOSSARY DATA
+   ========================================================= */
+const GLOSSARY = {
+  "par":{t:"Par",d:"The face value of a bond — the principal the borrower must repay at maturity. Pricing is quoted relative to par, where 100 means 100% of face."},
+  "premium":{t:"Premium / Discount",d:"Any amount paid above par is premium; any amount paid below par is discount. Both result from the relationship between coupon, yield, price, delivery date, and call structure."},
+  "discount":{t:"Premium / Discount",d:"Any amount paid below par is discount; any amount paid above par is premium. Both result from the relationship between coupon, yield, price, delivery date, and call structure."},
+  "coupon":{t:"Coupon",d:"The stated interest rate on a bond. It determines the interest paid, based on par. In conduit financings, the borrower/obligor is usually the economic party responsible for repayment."},
+  "yield":{t:"Yield",d:"The investor's effective return given the price they paid — in practice, the market rate for that bond."},
+  "price":{t:"Price",d:"What an investor actually pays, quoted as a percent of par. A price of 110 means 110% of face value."},
+  "serial bonds":{t:"Serial bonds",d:"Bonds of an issue that mature in consecutive years or other intervals and are not subject to mandatory sinking-fund provisions. A serial bond has a single payment date on maturity and its own individual pricing — it does not share pricing with other payments in the issuance."},
+  "term bonds":{t:"Term bonds",d:"Bonds that come due in a single maturity, where the issuer makes periodic mandatory sinking-fund payments before maturity. A term bond has at least two sinking-fund payments that share one price, and its maturity date falls on the final sinking-fund payment date."},
+  "sinking fund":{t:"Sinking fund",d:"Scheduled mandatory payments that redeem portions of a term bond on the interval set in the official statement (often annually or semi-annually), up to its final maturity."},
+  "amortization":{t:"Amortization",d:"The principal repayment structure of an issue. A common goal is level debt service, where principal often rises over time as interest falls so total debt service stays smoother."},
+  "level debt service":{t:"Level debt service",d:"An amortization goal where principal plus interest stays relatively level over time — principal typically increases as interest decreases."},
+  "debt service":{t:"Debt service",d:"Principal plus interest due in a period — the total cash a borrower actually pays."},
+  "call date":{t:"Call date",d:"The date on or after which bonds can be redeemed at the stated call price. It affects when existing bonds can be redeemed at that price — not by itself whether they can be refunded."},
+  "call price":{t:"Call price",d:"The stated price at which bonds can be redeemed on or after the call date."},
+  "make-whole price":{t:"Make-whole price",d:"A formula-based redemption price that may apply if bonds are redeemed before the normal call date, under a make-whole redemption provision."},
+  "defeasance":{t:"Defeasance",d:"Setting aside funds, often in an escrow, to legally satisfy the debt service on outstanding bonds. Bonds may be defeased before the call date even when they can't yet be redeemed at the normal call price."},
+  "optional redemption":{t:"Optional redemption",d:"The issuer's right to redeem bonds early at the call price on or after the call date."},
+  "refunding":{t:"Refunding",d:"Issuing new bonds to pay off existing bonds, typically to capture lower interest rates. Whether a bond is refunded depends on economics, structure, call provisions, and the purpose of the analysis."},
+  "new money":{t:"New money",d:"A purpose where proceeds fund a new project rather than repaying existing debt."},
+  "current refunding":{t:"Current refunding",d:"A refunding where the existing bonds are redeemed within roughly 90 days of the new issue."},
+  "advance refunding":{t:"Advance refunding",d:"A refunding completed well before the call date, funding an escrow to hold proceeds until redemption is permitted. Tax-exempt advance refundings are restricted under current federal tax law, but the concept is still useful historically and for understanding refunding structures."},
+  "negative arbitrage":{t:"Negative arbitrage",d:"The cost that can occur when escrowed refunding proceeds earn less than the yield/cost of the refunding bonds."},
+  "pv savings":{t:"PV savings",d:"The present value of the debt-service reduction from a refunding — the headline measure of how much the deal benefits the borrower."},
+  "costs of issuance":{t:"Costs of issuance",d:"Fees to bring a deal to market (counsel, advisor, rating, and similar). They appear on the Uses side of Sources & Uses."},
+  "capitalized interest":{t:"Capitalized interest",d:"Bond proceeds set aside to pay interest during construction, before a project starts generating revenue."},
+  "sources & uses":{t:"Sources & Uses",d:"The two-sided table where Sources are the funds available and Uses are what they pay for. The two totals must match exactly."},
+  "match maturity":{t:"Match maturity",d:"Structuring the refunding bonds to correspond to the maturities being refunded — with the final maturity lined up — so old and new debt service can be compared apples-to-apples. A useful structure for comparing savings, not always required."},
+  "issuer":{t:"Issuer",d:"The legal entity that issues the bonds. Sometimes the borrower itself; sometimes a finance authority acting as a conduit issuer on the borrower's behalf."},
+  "conduit issuer":{t:"Conduit issuer",d:"An entity (often a finance authority) that provides the legal mechanism to issue the bonds. The actual borrower/obligor is usually responsible for repayment; the conduit issuer does not necessarily guarantee repayment or provide its own credit support."},
+  "finance authority":{t:"Finance authority",d:"A public entity that can act as a conduit issuer, providing the legal issuing mechanism for bonds on behalf of a borrower."},
+  "obligor":{t:"Obligor / Borrower",d:"The entity responsible for repaying the debt and whose credit usually drives the rating, unless the issuer or another party is actually providing credit support."},
+  "borrower":{t:"Borrower",d:"The entity responsible for repaying the debt and whose credit profile usually underlies the rating."},
+  "project":{t:"Project",d:"The broader financing/scenario container in Adaje. A project can hold multiple issues and purposes when they're part of the same scenario, connected through assignments. A refunding of existing live debt is generally modeled as its own separate project."},
+  "issue":{t:"Issue",d:"One financing or bond series inside a project. A single project can have multiple issues. (Distinct from issuance — the process of going to market.)"},
+  "issuance":{t:"Issuance",d:"The process of bonds going to market. Not the same as an issue, which is the bond series itself."},
+  "credit":{t:"Credit profile",d:"The borrower's financial strength and ratings, which usually determine the rates it can get when it borrows."},
+  "purpose":{t:"Purpose",d:"Why the bonds are being issued — for example, new money or refunding. A purpose is not a project; a project can contain several purposes."},
+  "assignment":{t:"Assignment",d:"The link that connects purposes to the issues that fund them inside a project."}
+};
+
+/* =========================================================
+   MODAL / GLOSSARY
+   ========================================================= */
+const modal = document.getElementById('modal');
+const modalBody = document.getElementById('modalBody');
+const modalPanel = document.getElementById('modalPanel');
+let lastFocus = null;
+
+function openModal(html, wide){
+  lastFocus = document.activeElement;
+  modalBody.innerHTML = html;
+  modalPanel.classList.toggle('wide', !!wide);
+  modal.hidden = false;
+  const c = modalPanel.querySelector('.modal__close'); if(c) c.focus();
+}
+function closeModal(){
+  modal.hidden = true;
+  if(lastFocus && lastFocus.focus) lastFocus.focus();
+}
+function openTerm(key){
+  const e = GLOSSARY[key]; if(!e) return;
+  openModal(`<div class="modal__tag">Glossary term</div>
+    <div class="modal__term" id="modalTitle">${e.t}</div>
+    <p class="modal__def">${e.d}</p>`, false);
+}
+function openGlossaryList(){
+  const keys = Object.keys(GLOSSARY).sort((a,b)=>GLOSSARY[a].t.localeCompare(GLOSSARY[b].t));
+  const entries = keys.map(k=>`<div class="gl-entry" data-k="${k}"><dt>${GLOSSARY[k].t}</dt><dd>${GLOSSARY[k].d}</dd></div>`).join('');
+  openModal(`<div class="modal__tag">Mini glossary</div>
+    <div class="modal__term" id="modalTitle">Key terms</div>
+    <input class="gl-search" id="glSearch" type="text" placeholder="Filter terms…" autocomplete="off">
+    <dl class="gl-list" id="glList">${entries}</dl>`, true);
+  const search = document.getElementById('glSearch');
+  const list = document.getElementById('glList');
+  search.addEventListener('input', ()=>{
+    const q = search.value.trim().toLowerCase();
+    list.querySelectorAll('.gl-entry').forEach(el=>{
+      const txt = el.textContent.toLowerCase();
+      el.style.display = txt.includes(q) ? '' : 'none';
+    });
+  });
+}
+
+// delegated: inline term tokens
+document.addEventListener('click', e=>{
+  const t = e.target.closest('.term');
+  if(t){ openTerm(t.dataset.term); return; }
+  if(e.target.closest('[data-close]')){ closeModal(); return; }
+  const ge = e.target.closest('.gl-entry');
+  if(ge){ openTerm(ge.dataset.k); }
+});
+document.getElementById('glossaryBtn').addEventListener('click', openGlossaryList);
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !modal.hidden) closeModal(); });
+
+/* =========================================================
+   TRANSLATION MAP (Section 10)
+   ========================================================= */
+const MAP = [
+  ["Borrower","Borrower-level debt profile","The credit everything rolls up to","borrower"],
+  ["Project","Project Config","The financing container holding issues and purposes","project"],
+  ["Issue","Issue quadrant","One bond series inside the project","issue"],
+  ["Purpose","New money or refunding purpose","Why the bonds are issued (not a project)","purpose"],
+  ["Assignment","Assignment","Connects purposes to the issues that fund them","assignment"],
+  ["Amortization","Principal schedule","How principal is repaid over time","amortization"],
+  ["Bonds &amp; Pricing","Coupon, yield, price, call dates","The market mechanics of the bonds","price"],
+  ["Sources &amp; Uses","Funding balance","Where Sources must tie to Uses","sources & uses"],
+  ["Refunding candidates","Refunding Monitor","Surfaces what's worth analyzing","refunding"],
+  ["Borrower impact","Debt Summary","Shows the effect at the borrower level","debt service"]
+];
+const mapBox = document.getElementById('mapBox');
+mapBox.innerHTML = MAP.map(([c,s,why,term])=>`
+  <div class="map-row">
+    <div class="map-concept"><button class="term" data-term="${term}" style="font-size:14.5px">${c}</button><small>${why}</small></div>
+    <div class="map-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+    <div class="map-soft">${s}</div>
+  </div>`).join('');
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+const QUIZ = [
+  {q:"Northgate issues new bonds in 2026 solely to pay off its higher-rate 2015 bonds. This is:",
+   o:["New money","A refunding","Capitalized interest","A sinking fund"], a:1},
+  {q:"In a Sources & Uses table, total Sources must:",
+   o:["Exceed total Uses","Equal total Uses","Be less than Uses by the costs of issuance","Match the par amount exactly"], a:1},
+  {q:"What is the key difference between a serial bond and a term bond?",
+   o:[
+     "Serial bonds can be refunded; term bonds cannot",
+     "A serial bond has a single payment date and its own pricing; a term bond has multiple sinking-fund payments that share one price",
+     "Serial bonds always carry higher coupons than term bonds",
+     "Term bonds mature every year; serial bonds mature only once"
+   ], a:1},
+  {q:"A bond's coupon is 5.00% and it is priced to yield 3.50%. Its price is most likely:",
+   o:["Below par (a discount)","Exactly par","Above par (a premium)","Impossible to tell"], a:2},
+  {q:"A bond's call date primarily determines:",
+   o:[
+     "Whether the bond can ever be refunded",
+     "The date on or after which the bond can be redeemed at the stated call price",
+     "The coupon rate on any refunding bonds",
+     "The amount of premium generated at issuance"
+   ], a:1}
+];
+const quizEl = document.getElementById('quiz');
+let answered = new Array(QUIZ.length).fill(false);
+let score = 0;
+const LET = ['A','B','C','D'];
+
+function renderQuiz(){
+  answered = new Array(QUIZ.length).fill(false); score = 0;
+  quizEl.innerHTML = QUIZ.map((item,qi)=>`
+    <div class="q">
+      <div class="qn">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="qt">${item.q}</div>
+      <div class="opts" data-q="${qi}">
+        ${item.o.map((opt,oi)=>`
+          <button class="opt" data-q="${qi}" data-o="${oi}">
+            <span class="mk">${LET[oi]}</span>
+            <span>${opt}</span>
+            <svg class="ck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+          </button>`).join('')}
+      </div>
+    </div>`).join('') + `
+    <div class="quiz-foot">
+      <div class="score">Score: <b id="scoreVal">0</b> / ${QUIZ.length}</div>
+      <button class="btn ghost" id="resetQuiz">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2v6h-6M3 12a9 9 0 0 1 15-6.7L21 8M3 22v-6h6M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+        Reset quiz
+      </button>
+    </div>`;
+}
+renderQuiz();
+
+quizEl.addEventListener('click', e=>{
+  const reset = e.target.closest('#resetQuiz');
+  if(reset){ renderQuiz(); return; }
+  const btn = e.target.closest('.opt');
+  if(!btn) return;
+  const qi = +btn.dataset.q, oi = +btn.dataset.o;
+  if(answered[qi]) return;
+  answered[qi] = true;
+  const correct = QUIZ[qi].a;
+  const opts = quizEl.querySelector(`.opts[data-q="${qi}"]`);
+  opts.querySelectorAll('.opt').forEach(o=>{
+    o.disabled = true;
+    const j = +o.dataset.o;
+    if(j===correct) o.classList.add('correct');
+    if(j===oi && oi!==correct) o.classList.add('wrong');
+  });
+  if(oi===correct) score++;
+  const sv = document.getElementById('scoreVal'); if(sv) sv.textContent = score;
+});
+
+/* =========================================================
+   SOURCES & USES INTERACTIVE — Solve to balance via rounding amount
+   ========================================================= */
+const SOURCES_TOTAL = 12790000;      // par 12,000,000 + premium 640,000 + funds 150,000
+const USES_BASE     = 12745000;      // project 12,400,000 + COI 95,000 + cap int 250,000
+const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+const suRoundEl   = document.getElementById('suRound');
+const suUsesEl    = document.getElementById('suUsesTotal');
+const suStatus    = document.getElementById('suStatus');
+const suStatusTxt = document.getElementById('suStatusText');
+
+function renderSU(rounding){
+  const usesTotal = USES_BASE + rounding;
+  suRoundEl.textContent = fmt(rounding);
+  suUsesEl.textContent  = fmt(usesTotal);
+  const gap = SOURCES_TOTAL - usesTotal;
+  if(Math.abs(gap) < 1){
+    suStatus.className = 'su-status bal';
+    suStatus.querySelector('.badge').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>';
+    suStatusTxt.textContent = 'Balanced — Sources = Uses ✓';
+  } else {
+    suStatus.className = 'su-status off';
+    suStatus.querySelector('.badge').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 9v4M12 17h.01"/></svg>';
+    suStatusTxt.textContent = `Out of balance by ${fmt(Math.abs(gap))}`;
+  }
+}
+document.getElementById('suSolve').addEventListener('click', ()=>{
+  renderSU(SOURCES_TOTAL - USES_BASE);   // add the rounding amount that ties the two sides
+});
+document.getElementById('suReset').addEventListener('click', ()=>{
+  renderSU(0);
+});
+renderSU(0);
+
+
+/* =========================================================
+   SPEAKER NOTES TOGGLE
+   ========================================================= */
+const notesBtn = document.getElementById('notesBtn');
+notesBtn.addEventListener('click', ()=>{
+  const off = document.body.classList.toggle('no-notes');
+  notesBtn.classList.toggle('on', !off);
+  notesBtn.setAttribute('aria-pressed', String(!off));
+});
+
+/* =========================================================
+   NAVIGATION · progress · dots · deck nav · keyboard
+   ========================================================= */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const total = slides.length;
+document.getElementById('totNum').textContent = total;
+let current = 0;
+
+// dot nav
+const dotnav = document.getElementById('dotnav');
+dotnav.innerHTML = slides.map((s,i)=>`<button data-i="${i}" aria-label="Go to ${s.dataset.title}"><span class="tip">${s.dataset.title}</span></button>`).join('');
+const dots = Array.from(dotnav.children);
+dotnav.addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  goTo(+b.dataset.i);
+});
+
+function goTo(i){
+  i = Math.max(0, Math.min(total-1, i));
+  slides[i].scrollIntoView({behavior:'smooth', block:'start'});
+}
+document.getElementById('startBtn').addEventListener('click', ()=>goTo(1));
+document.getElementById('prevBtn').addEventListener('click', ()=>goTo(current-1));
+document.getElementById('nextBtn').addEventListener('click', ()=>goTo(current+1));
+
+function setCurrent(i){
+  current = i;
+  document.getElementById('curNum').textContent = i+1;
+  dots.forEach((d,j)=>d.setAttribute('aria-current', j===i ? 'true':'false'));
+  document.getElementById('prevBtn').disabled = i===0;
+  document.getElementById('nextBtn').disabled = i===total-1;
+}
+
+// progress bar (continuous) + reveal + active section
+const fill = document.getElementById('progressFill');
+function onScroll(){
+  const sc = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  fill.style.width = (max>0 ? (sc/max*100) : 0) + '%';
+}
+window.addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+// IntersectionObserver: reveal + which section is active
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      en.target.querySelectorAll('.reveal').forEach(r=>r.classList.add('in'));
+    }
+  });
+}, {threshold:0.15});
+slides.forEach(s=>io.observe(s));
+
+// active-section observer (separate, higher threshold-ish via rootMargin)
+const ioActive = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      const i = slides.indexOf(en.target);
+      if(i>=0) setCurrent(i);
+    }
+  });
+}, {rootMargin:'-45% 0px -45% 0px', threshold:0});
+slides.forEach(s=>ioActive.observe(s));
+
+// keyboard arrows (ignore when typing in the glossary filter)
+document.addEventListener('keydown', e=>{
+  if(!modal.hidden) return;
+  const tag = (e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea') return;
+  if(e.key==='ArrowDown'||e.key==='ArrowRight'||e.key==='PageDown'){ e.preventDefault(); goTo(current+1); }
+  if(e.key==='ArrowUp'||e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); goTo(current-1); }
+});
+
+setCurrent(0);
+</script>
+</body>
+</html>
